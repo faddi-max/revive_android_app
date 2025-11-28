@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "752512763723",
+    "project_id": "reviveapp-64f08",
+    "storage_bucket": "reviveapp-64f08.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:752512763723:android:e1c0dd119d6b46ecc28ace",
+        "android_client_info": {
+          "package_name": "com.example.revive_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "752512763723-q2vacpiia9019rer36jjrh5k7f0t972j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGXKKIvYKWTQ9MK5vkQ7JwOqrBGTi1Quk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "752512763723-q2vacpiia9019rer36jjrh5k7f0t972j.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "752512763723-aea9d7tbe23vhtr35ghnicfsgbo62kor.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.reviveApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:752512763723:android:54d7c03a296daba3c28ace",
+        "android_client_info": {
+          "package_name": "com.revive.app123"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "752512763723-q2vacpiia9019rer36jjrh5k7f0t972j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGXKKIvYKWTQ9MK5vkQ7JwOqrBGTi1Quk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "752512763723-q2vacpiia9019rer36jjrh5k7f0t972j.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "752512763723-aea9d7tbe23vhtr35ghnicfsgbo62kor.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.reviveApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
