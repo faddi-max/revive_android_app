@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:revive_app/Blocs/AuthBlocs/Loginblocs.dart';
+import 'package:revive_app/Events/AuthEvents/loginevents.dart';
+import 'package:revive_app/State/Revivestate.dart';
 import 'package:revive_app/utils/Theme/Colors.dart';
 import 'package:revive_app/widgets/ReviveBtton.dart';
 import 'package:revive_app/widgets/ReviveField.dart';
@@ -11,14 +15,14 @@ class Loginscreen extends StatefulWidget {
 }
 
 class _LoginscreenState extends State<Loginscreen> {
-  final TextEditingController _usernamecontroller = TextEditingController();
+  final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
-  final FocusNode _usernamefocusNode = FocusNode();
+  final FocusNode _emailfocusNode = FocusNode();
   final FocusNode _passwordfocusnode = FocusNode();
 
   @override
   void dispose() {
-    _usernamefocusNode.dispose();
+    _emailfocusNode.dispose();
     _passwordfocusnode.dispose();
     super.dispose();
   }
@@ -27,134 +31,165 @@ class _LoginscreenState extends State<Loginscreen> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _usernamefocusNode.unfocus();
+        _emailfocusNode.unfocus();
         _passwordfocusnode.unfocus();
       },
-      child: Scaffold(
-        backgroundColor: AppColors.BgColor,
-        body: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: Image.asset(
-                    "assets/images/logo.png",
-                    fit: BoxFit.contain,
-                    width: 200,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  "Sign in to ReVive. Clear your closet, fill someone’s heart.",
-                  textAlign: TextAlign.center,
-                  softWrap: true,
-                  overflow: TextOverflow.visible,
-                  style: TextStyle(
-                    color: AppColors.Secondrycolor,
-                    fontSize: 15,
-                  ),
-                ),
-                SizedBox(height: 30),
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 2.5,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: AppColors.Primarycolor,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
+      child: BlocConsumer<Loginblocs, Revivestate>(
+        listener: (context, state) {
+          if (state is ReviveError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error), backgroundColor: Colors.red),
+            );
+          } else if (state is ReviveLoaded) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Login Successful'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is ReviveLoading) {
+            return Center(
+              child: CircularProgressIndicator(color: AppColors.Primarycolor),
+            );
+          }
+          return Scaffold(
+            backgroundColor: AppColors.BgColor,
+            body: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Image.asset(
+                        "assets/images/logo.png",
+                        fit: BoxFit.contain,
+                        width: 200,
                       ),
-                      SizedBox(width: 2),
-                      Container(
-                        height: 2.5,
-                        width: 25,
-                        decoration: BoxDecoration(
-                          color: AppColors.Secondrycolor,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "Sign in to ReVive. Clear your closet, fill someone’s heart.",
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                      overflow: TextOverflow.visible,
+                      style: TextStyle(
+                        color: AppColors.Secondrycolor,
+                        fontSize: 15,
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                    SizedBox(height: 30),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 2.5,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              color: AppColors.Primarycolor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 2),
+                          Container(
+                            height: 2.5,
+                            width: 25,
+                            decoration: BoxDecoration(
+                              color: AppColors.Secondrycolor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
 
-                SizedBox(height: 30),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 25),
-                      child: Image.asset(
-                        'assets/images/new-gmail-icon.png',
-                        width: 35,
-                        height: 35,
-                      ),
+                    SizedBox(height: 30),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 25),
+                          child: Image.asset(
+                            'assets/images/new-gmail-icon.png',
+                            width: 35,
+                            height: 35,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Revivefield(
+                            focusNode: _emailfocusNode,
+                            controller: _emailcontroller,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'username is required';
+                              }
+                              return null;
+                            },
+                            label: 'User Name',
+                            obscuretext: false,
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                      ],
                     ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Revivefield(
-                        focusNode: _usernamefocusNode,
-                        controller: _usernamecontroller,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'username is required';
-                          }
-                          return null;
-                        },
-                        label: 'User Name',
-                        obscuretext: false,
-                      ),
+                    SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Image.asset(
+                            'assets/images/password-icon.png',
+                            width: 35,
+                            height: 35,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Revivefield(
+                            focusNode: _passwordfocusnode,
+                            controller: _passwordcontroller,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Password is required';
+                              }
+                              return null;
+                            },
+                            label: 'Password',
+                            obscuretext: true,
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 40),
+                    Revivebutton(
+                      label: 'Sign In',
+                      onTap: () {
+                        final username = _emailcontroller.text.trim();
+                        final password = _passwordcontroller.text.trim();
+                        BlocProvider.of<Loginblocs>(context).add(
+                          LoginRequested(email: username, password: password),
+                        );
+                      },
+                      bgcolor: AppColors.Primarycolor,
+                    ),
                   ],
                 ),
-                SizedBox(height: 10),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Image.asset(
-                        'assets/images/password-icon.png',
-                        width: 35,
-                        height: 35,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Revivefield(
-                        focusNode: _passwordfocusnode,
-                        controller: _passwordcontroller,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'Password is required';
-                          }
-                          return null;
-                        },
-                        label: 'Password',
-                        obscuretext: true,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 40),
-                Revivebutton(
-                  label: 'Sign In',
-                  onTap: () {
-                    print("Tapped");
-                  },
-                  bgcolor: AppColors.Primarycolor,
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
