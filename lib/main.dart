@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:revive_app/Blocs/AuthBlocs/Loginblocs.dart';
+import 'package:revive_app/Blocs/AuthBlocs/signupbloc.dart';
 import 'package:revive_app/firebase_options.dart';
 import 'package:revive_app/utils/Theme/GoRouter.dart';
 
@@ -12,7 +13,7 @@ void main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider<Loginblocs>(create: (context) => Loginblocs()),
-        // Add other BlocProviders here
+        BlocProvider<SignupBloc>(create: (context) => SignupBloc()),
       ],
       child: const MyApp(),
     ),

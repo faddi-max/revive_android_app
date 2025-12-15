@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-class AuthRepo {
+class LoginRepo {
   final FirebaseAuth _firebaseauth = FirebaseAuth.instance;
 
   Future<User?> LoginUser({

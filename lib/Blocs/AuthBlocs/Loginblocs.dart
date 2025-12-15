@@ -5,7 +5,7 @@ import 'package:revive_app/Repositries/AuthRepos/loginrepo.dart';
 import 'package:revive_app/State/Revivestate.dart';
 
 class Loginblocs extends Bloc<Loginevents, Revivestate> {
-  final AuthRepo _authrepo = AuthRepo();
+  final LoginRepo _authrepo = LoginRepo();
   Loginblocs() : super(ReviveInitial()) {
     on<LoginRequested>(loginevent);
   }

@@ -1,31 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:revive_app/Blocs/AuthBlocs/Loginblocs.dart';
-import 'package:revive_app/Events/AuthEvents/loginevents.dart';
+import 'package:revive_app/Blocs/AuthBlocs/signupbloc.dart';
+import 'package:revive_app/Events/AuthEvents/signupevents.dart';
 import 'package:revive_app/State/Revivestate.dart';
 import 'package:revive_app/utils/Theme/Colors.dart';
-import 'package:revive_app/utils/Theme/routes.dart';
 import 'package:revive_app/widgets/ReviveBtton.dart';
 import 'package:revive_app/widgets/ReviveField.dart';
 
-class Loginscreen extends StatefulWidget {
-  const Loginscreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<Loginscreen> createState() => _LoginscreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginscreenState extends State<Loginscreen> {
+class _SignupScreenState extends State<SignupScreen> {
+  final TextEditingController _fullnamecontroller = TextEditingController();
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
-  final FocusNode _emailfocusNode = FocusNode();
+  final TextEditingController __phonenumbercontroller = TextEditingController();
+
+  // focus nodes
+  final FocusNode _fullnamefocusnode = FocusNode();
+  final FocusNode _emailfocusnode = FocusNode();
   final FocusNode _passwordfocusnode = FocusNode();
+  final FocusNode _phonenumberfocusnode = FocusNode();
 
   @override
   void dispose() {
-    _emailfocusNode.dispose();
+    _fullnamefocusnode.dispose();
+    _emailfocusnode.dispose();
     _passwordfocusnode.dispose();
+    _phonenumberfocusnode.dispose();
     super.dispose();
   }
 
@@ -33,24 +40,26 @@ class _LoginscreenState extends State<Loginscreen> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _emailfocusNode.unfocus();
+        _fullnamefocusnode.unfocus();
+        _emailfocusnode.unfocus();
         _passwordfocusnode.unfocus();
+        _phonenumberfocusnode.unfocus();
       },
-      child: BlocConsumer<Loginblocs, Revivestate>(
+      child: BlocConsumer<SignupBloc, Revivestate>(
         listener: (context, state) {
+          if (state is ReviveLoaded) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text("Signup Successfull")));
+          }
+
           if (state is ReviveError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error), backgroundColor: Colors.red),
-            );
-          } else if (state is ReviveLoaded) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Login Successful'),
-                backgroundColor: Colors.green,
-              ),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.error)));
           }
         },
+
         builder: (context, state) {
           if (state is ReviveLoading) {
             return Center(
@@ -130,19 +139,48 @@ class _LoginscreenState extends State<Loginscreen> {
                         SizedBox(width: 8),
                         Expanded(
                           child: Revivefield(
-                            focusNode: _emailfocusNode,
-                            controller: _emailcontroller,
+                            focusNode: _fullnamefocusnode,
+                            controller: _fullnamecontroller,
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return 'username is required';
+                                return 'Fullname is required';
                               }
                               return null;
                             },
-                            label: 'User Name',
+                            label: 'Fullname',
                             obscuretext: false,
                           ),
                         ),
                         SizedBox(height: 20),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Image.asset(
+                            'assets/images/password-icon.png',
+                            width: 35,
+                            height: 35,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Revivefield(
+                            focusNode: _emailfocusnode,
+                            controller: _emailcontroller,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Email is required';
+                              }
+                              return null;
+                            },
+                            label: 'Email',
+                            obscuretext: false,
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: 10),
@@ -174,37 +212,54 @@ class _LoginscreenState extends State<Loginscreen> {
                         ),
                       ],
                     ),
+                    SizedBox(height: 10),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Image.asset(
+                            'assets/images/password-icon.png',
+                            width: 35,
+                            height: 35,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Revivefield(
+                            focusNode: _phonenumberfocusnode,
+                            controller: __phonenumbercontroller,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Phone Number is required';
+                              }
+                              return null;
+                            },
+                            label: 'Phone Number',
+                            obscuretext: false,
+                          ),
+                        ),
+                      ],
+                    ),
+
                     SizedBox(height: 40),
                     Revivebutton(
                       label: 'Sign In',
                       onTap: () {
-                        final username = _emailcontroller.text.trim();
+                        final fullname = _fullnamecontroller.text.trim();
+                        final phonenumber = __phonenumbercontroller.text.trim();
+                        final email = _emailcontroller.text.trim();
                         final password = _passwordcontroller.text.trim();
-                        BlocProvider.of<Loginblocs>(context).add(
-                          LoginRequested(email: username, password: password),
+                        BlocProvider.of<SignupBloc>(context).add(
+                          SignupRequested(
+                            fullname: fullname,
+                            phone: phonenumber,
+                            email: email,
+                            password: password,
+                          ),
                         );
                       },
                       bgcolor: AppColors.Primarycolor,
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("Don’t have an account?"),
-                        GestureDetector(
-                          onTap: () {
-                            context.go(AppRoutes.Signup_Path);
-                          },
-                          child: Text(
-                            " SignUp",
-                            style: TextStyle(
-                              color: AppColors.Primarycolor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ],
                 ),
